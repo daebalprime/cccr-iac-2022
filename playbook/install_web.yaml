@@ -1,0 +1,43 @@
+---
+- name: Install Apache
+  hosts: webserver
+
+  tasks:
+  - name: Download Source
+    get_url:
+      dest: /tmp
+      url: https://github.com/StartBootstrap/startbootstrap-sb-admin-2/archive/refs/tags/v4.1.4.tar.gz
+  - name: Create Directory
+    file:
+      path: /var/www/html
+      state: directory
+  - name: Unarchieve Tar file
+    unarchive:
+      src: /tmp/startbootstrap-sb-admin-2-4.1.4.tar.gz
+      remote_src: true
+      dest: /tmp   
+  - name: Copy source 
+    copy:
+      src: /tmp/startbootstrap-sb-admin-2-4.1.4/
+      remote_src: true
+      dest: /var/www/html
+  - name: Install Apache2 Package
+    apt:
+      name: apache2
+      state: present
+      update_cache: true
+  - name: Enable/Start Service
+    service:
+      name: apache2
+      enabled: true
+      state: started
+
+- name: Access Check
+  hosts: local
+
+  tasks:
+  - name: Access Check
+    uri:
+      url: http://192.168.57.21
+      method: GET
+      status_code: 200
