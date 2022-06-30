@@ -1,0 +1,4 @@
+sb_admin_version: "4.1.4"
+sb_admin_url: "https://github.com/StartBootstrap/startbootstrap-sb-admin-2/archive/refs/tags/v{{ sb_admin_version }}.tar.gz"
+sb_admin_dir: "startbootstrap-sb-admin-2-{{ sb_admin_version }}"
+sb_admin_filename: "{{ sb_admin_dir }}.tar.gz"
