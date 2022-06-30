@@ -1,0 +1,13 @@
+- hosts: webserver
+  become: true
+
+  roles:
+  - web
+
+  post_tasks:
+  - name: Access Check
+    uri:
+      url: "http://192.168.57.21:{{ apache_port }}"
+      method: GET
+      status_code: 200
+    delegate_to: iac-control1
