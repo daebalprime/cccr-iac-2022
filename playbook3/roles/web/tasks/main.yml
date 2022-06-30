@@ -1,0 +1,35 @@
+- name: Download Source
+  get_url:
+    dest: /tmp
+    url: "{{ sb_admin_url }}"
+- name: Create Directory
+  file:
+    path: /var/www/html
+    state: directory
+- name: Unarchieve Tar file
+  unarchive:
+    src: "/tmp/{{ sb_admin_filename }}"
+    remote_src: true
+    dest: /tmp   
+- name: Copy source 
+  copy:
+    src: "/tmp/{{ sb_admin_dir }}/"
+    remote_src: true
+    dest: /var/www/html
+- name: Install Apache2 Package
+  apt:
+    name: apache2
+    state: present
+    update_cache: true
+- name: Change Ports Configuration
+  template:
+    src: ports.conf.j2
+    dest: /etc/apache2/ports.conf
+    backup: yes
+  notify:
+  - Restart Apache Service
+- name: Start Apache Service
+  service:
+    name: apache2
+    state: started
+    enabled: true
