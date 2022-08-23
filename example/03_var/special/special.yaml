@@ -1,0 +1,9 @@
+---
+- hosts: mgmt
+  tasks:
+    - debug:
+        msg: "{{ inventory_hostname }}"
+    - debug:
+        msg: "{{ hostvars[inventory_hostname]['ansible_enp0s8']['ipv4']['address'] }}"
+    - debug:
+        msg: "{{ hostvars[inventory_hostname]['ansible_distribution'] }}"

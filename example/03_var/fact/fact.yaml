@@ -1,0 +1,12 @@
+---
+- hosts: mgmt
+  #gather_facts: no
+
+  tasks:
+    - debug:
+        msg: "{{ ansible_enp0s8['ipv4']['address'] }}"
+    - set_fact:
+        service_port: 8080
+        hostname: "{{ ansible_hostname }}"
+    - debug:
+        msg: "{{ hostname }}"
