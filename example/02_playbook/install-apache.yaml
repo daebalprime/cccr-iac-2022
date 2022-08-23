@@ -1,0 +1,33 @@
+---
+#Play
+- name: Install Apache with sb-admin
+  hosts: mgmt
+
+  tasks:
+  #Task
+  - name: Create Directory
+    file:
+      #Task Option/Paramater/Argument
+      path: /var/www/html
+      state: directory
+  - name: Clone git repo 
+    git:
+      repo: https://github.com/StartBootstrap/startbootstrap-sb-admin-2.git 
+      dest: /var/www/html 
+      version: v4.1.4
+  - name: Install Apache2 Package
+    apt:
+      name: apache2
+      update_cache: true
+      state: present
+  - name: Start/Enable Apache Service
+    service:
+      name: apache2
+      enabled: true
+      state: started
+
+
+
+
+
+
