@@ -62,6 +62,8 @@ rm -rf startbootstrap-sb-admin-2-4.1.4/
 
 ## Ansible Ad-hoc Command
 
+### Install
+
 ```
 ansible mgmt -m git -a "repo=https://github.com/StartBootstrap/startbootstrap-sb-admin-2.git dest=/var/www/html version=v4.1.4" -b
 ```
@@ -84,4 +86,14 @@ ansible mgmt -m apt -a 'name=apache2 state=present update_cache=true' -b
 
 ```
 ansible mgmt -m service -a 'name=apache2 state=started enabled=true' -b
+```
+
+### Remove
+
+```
+ansible mgmt -m apt -a 'name=apache2 state=absent autoremove=true' -b
+```
+
+```
+ansible mgmt -m file -a 'path=/var/www/html state=absent' -b
 ```
