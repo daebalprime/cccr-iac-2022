@@ -1,0 +1,17 @@
+---
+- hosts: mgmt
+  vars_prompt:
+    - name: username
+      prompt: Enter Username
+      private: no
+      default: devops
+    - name: hpass
+      prompt: Enter Password
+      private: yes
+      confirm: yes
+      salt_size: 16
+      encrypt: sha512_crypt
+
+  tasks:
+  - debug:
+      msg: "{{ username }} / {{ hpass }}"

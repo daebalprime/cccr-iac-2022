@@ -1,0 +1,15 @@
+---
+- hosts: mgmt
+  vars:
+    host_file_content: "{{ lookup('file', '/etc/hosts') }}"
+    aws_region_ip_range: "{{ lookup('url', 'https://ip-ranges.amazonaws.com/ip-ranges.json', split_lines=false) }}"
+    google_ips: "{{ lookup('dig', 'www.google.com') }}"
+
+  tasks:
+    - debug:
+        msg: "{{ host_file_content }}"
+    - debug:
+        msg: "{{ aws_region_ip_range }}"
+    # sudo apt install -y python3-dnspython
+    - debug:
+        msg: "{{ google_ips }}"
