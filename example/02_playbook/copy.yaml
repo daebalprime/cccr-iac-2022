@@ -1,0 +1,14 @@
+---
+# ansible mgmt -m copy -a 'src=hello.txt dest=/tmp/hello.txt'
+
+- name: Copy Play
+  hosts: mgmt 
+  tasks:
+    - name: Copy 1 hello.txt
+      copy:
+        src: hello.txt
+        dest: /tmp/hello1.txt
+    - name: Copy 2 hello.txt
+      copy:
+        src: hello.txt
+        dest: /tmp/hello2.txt
