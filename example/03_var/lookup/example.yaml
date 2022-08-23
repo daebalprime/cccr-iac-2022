@@ -2,8 +2,9 @@
 - hosts: mgmt
   vars:
     host_file_content: "{{ lookup('file', '/etc/hosts') }}"
-    aws_region_ip_range: "{{ lookup('url', 'https://ip-ranges.amazonaws.com/ip-ranges.json', split_lines=false) }}"
+    #aws_region_ip_range: "{{ lookup('url', 'https://ip-ranges.amazonaws.com/ip-ranges.json', split_lines=false) }}"
     google_ips: "{{ lookup('dig', 'www.google.com') }}"
+    aws_region_ip_range: "{{ lookup('aws_service_ip_ranges', region='ap-northeast-2', service='EC2') }}"
 
   tasks:
     - debug:
