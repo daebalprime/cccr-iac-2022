@@ -1,0 +1,20 @@
+---
+- hosts: all
+  vars:
+    playvars: "hello play"
+
+  tasks:
+  - name: Inventory ALL Group Vars
+    debug:
+      msg: "{{ message }}"
+  - name: Inventory Host Vars
+    debug:
+      msg: "{{ service_port }}"
+  - name: Play Vars
+    debug:
+      msg: "{{ playvars }}"
+  - name: Task Vars
+    debug:
+      msg: "{{ taskvars }}"
+    vars:
+      taskvars: "hello task"

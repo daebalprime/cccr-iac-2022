@@ -1,0 +1,10 @@
+- hosts: mgmt
+  tasks:
+    - copy:
+        content: hello world
+        dest: /tmp/hello.txt
+      register: copy_result
+    - debug:
+        var: copy_result['owner']
+    - debug:
+        msg: "{{ copy_result['owner'] }}" 
