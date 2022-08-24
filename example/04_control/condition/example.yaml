@@ -1,0 +1,30 @@
+---
+- hosts: mgmt
+  vars:
+    switch1: true
+    switch2: false
+
+  tasks:
+    - ping: 
+      when: switch1
+    - ping:
+      when: switch2
+    - apt:
+        name: apache2
+        update_cache: true # apt-get update
+        state: present
+      become: true
+      when: 
+        - ansible_os_family == "Debian" #AND
+        - ansible_distribution == "Ubuntu"
+    - yum:
+        name: httpd
+        state: present
+      become: true
+      when:
+        - ansible_os_family == "RedHat"
+        - ansible_distribution == "CentOS"
+    - debug:
+        
+
+
