@@ -1,0 +1,11 @@
+---
+- hosts: node1
+  vars:
+    location: Korea
+  tasks:
+  - copy:
+      src: hello.txt
+      dest: /tmp/hello-copy.txt
+  - template:
+      src: hello.txt
+      dest: /tmp/hello-template.txt
