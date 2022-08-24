@@ -1,0 +1,22 @@
+---
+- hosts: node1
+  tasks:
+  - name: block1
+    block:
+      - name: t1
+        command: hostname
+      - name: t2
+        command: "/usr/bin/false"
+      - name: t3
+        ping:
+    rescue:
+      - name: r1
+        ping:
+    always:
+      - name: a1
+        ping:
+  - name: block2
+    block:
+      - name: t4
+        ping:
+

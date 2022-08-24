@@ -6,92 +6,83 @@
     - vars/web.yaml
 
   tasks:
-  - name: Install Git
-    yum:
-      name: git
-      state: present
-    when:
-    - ansible_distribution == "CentOS"
-
-  - name: Create Directory
-    file:
-      path: "{{ web_document_directory }}"
-      state: directory
-  - name: Clone git repo 
-    git:
-      repo: "{{ web_source_url }}"
-      dest: "{{ web_document_directory }}" 
-      version: "{{ web_source_version }}"
- 
-  - name: Install Apache2 Package for Ubuntu
-    apt:
-      name: apache2
-      update_cache: true
-      state: present
-    when: 
-    - ansible_distribution == "Ubuntu"
-  - name: Configure Apache2 Service Port for Ubuntu
-    template:
-      src: jinja/ports.conf.j2
-      dest: /etc/apache2/ports.conf
-      backup: true
-    when:
-    - ansible_distribution == "Ubuntu"
-  
-  - name: Install Httpd Package for CentOS
-    yum:
-      name: httpd
-      state: present
-    when: 
-    - ansible_distribution == "CentOS"
-  - name: Configure Httpd Service Port for CentOS
-    lineinfile:
-      path: /etc/httpd/conf/httpd.conf
-      regexp: '^LISTEN'
-      line: "LISTEN {{ http_port }}" 
-    when:
-    - ansible_distribution == "CentOS"
-
-  - name: Start/Enable Apache Service for Ubuntu
-    service:
-      name: apache2
-      enabled: true
-      state: restarted
+  - name: For Ubuntu
+    block:
+    - name: Create Directory
+      file:
+        path: "{{ web_document_directory }}"
+        state: directory
+    - name: Clone git repo 
+      git:
+        repo: "{{ web_source_url }}"
+        dest: "{{ web_document_directory }}" 
+        version: "{{ web_source_version }}"
+    - name: Install Apache2 Package for Ubuntu
+      apt:
+        name: apache2
+        update_cache: true
+        state: present
+    - name: Configure Apache2 Service Port for Ubuntu
+      template:
+        src: jinja/ports.conf.j2
+        dest: /etc/apache2/ports.conf
+        backup: true
+      notify:
+        - Restart Apache2
+    - name: Start/Enable Apache Service for Ubuntu
+      service:
+        name: apache2
+        enabled: true
+        state: started
     when:
     - ansible_distribution == "Ubuntu"
 
-  - name: Start/Enable Apache Service for CentOS
-    service:
-      name: httpd
-      enabled: true
-      state: restarted
+  - name: For CentOS
+    block:
+    - name: Install Git
+      yum:
+       name: git
+       state: present
+    - name: Create Directory
+      file:
+        path: "{{ web_document_directory }}"
+        state: directory
+    - name: Clone git repo 
+      git:
+        repo: "{{ web_source_url }}"
+        dest: "{{ web_document_directory }}" 
+        version: "{{ web_source_version }}"
+    - name: Install Httpd Package for CentOS
+      yum:
+        name: httpd
+        state: present
+    - name: Configure Httpd Service Port for CentOS
+      lineinfile:
+        path: /etc/httpd/conf/httpd.conf
+        regexp: '^LISTEN'
+        line: "LISTEN {{ http_port }}" 
+      notify:
+        - Restart Httpd
+    - name: Start/Enable Apache Service for CentOS
+      service:
+        name: httpd
+        enabled: true
+        state: started
+    - name: Open Firewall Web service for CentOS
+      firewalld:
+        port: "{{ http_port }}/tcp"
+        permanent: true
+        state: enabled
+        immediate: true
     when:
     - ansible_distribution == "CentOS"
 
-  - name: Open Firewall Web service for CentOS
-    firewalld:
-      port: "{{ http_port }}/tcp"
-      permanent: true
-      state: enabled
-      immediate: true
-    when:
-    - ansible_distribution == "CentOS"
-
-  - debug:
-      msg: "http://{{ hostvars[inventory_hostname]['ansible_host'] }}:{{ http_port }}"
   - name: Check Local Access
     uri:
       url: "http://{{ hostvars[inventory_hostname]['ansible_host'] }}:{{ http_port }}"
       status_code: 200
       return_content: true
       method: GET
-
-- name: Access Check
-  hosts: local
-  vars_files:
-    - vars/web.yaml
-
-  tasks:
   - name: Check Remote Access
     uri:
       url: "http://{{ hostvars[ item ]['ansible_host'] }}:{{ http_port }}"
@@ -100,6 +91,13 @@
       method: GET
     register: access_result
     loop: "{{ groups['webservers'] }}"
-  #- debug:
-      #msg: "URL: {{ access_result.url }} / CODE: {{ access_result.status }}"
 
+  handlers:
+  - name: Restart Apache2
+    service:
+      name: apache2
+      state: restarted
+  - name: Restart Httpd
+    service:
+      name: httpd
+      state: restarted

@@ -1,0 +1,30 @@
+---
+- hosts: node1
+  tasks:
+  - name: task1
+    ping:
+    notify:
+      - handler3
+  - name: task2
+    command: hostname
+    notify:
+      - handler2
+  - name: task3
+    command: hostname
+    notify:
+      - handler1
+  - name: task4
+    ping:
+  handlers:
+  - name: handler3
+    debug:
+      msg: "HANDLER3"
+  - name: handler1
+    debug:
+      msg: "HANDLER1"
+  - name: handler2
+    debug:
+      msg: "HANDLER2"
+  - name: handler2
+    debug:
+      msg: "HANDLER222"

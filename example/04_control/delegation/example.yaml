@@ -1,0 +1,14 @@
+---
+- hosts: node1
+  tasks:
+  - command: hostname
+    register: comm_result
+
+  - debug:
+      var: comm_result.stdout
+  - command: hostname
+    delegate_to: node2
+    register: comm_result
+    
+  - debug:
+      var: comm_result.stdout

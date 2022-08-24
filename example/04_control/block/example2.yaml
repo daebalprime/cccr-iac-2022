@@ -1,0 +1,16 @@
+---
+- hosts: node1
+  tasks:
+      - name: t1
+        command: hostname
+        notify:
+          - h1
+      - name: t2
+        command: "/usr/bin/false"
+      - name: t3
+        ping:
+  handlers:
+    - name: h1
+      debug: 
+        msg: "Hello FORCE HANDLER"
+
