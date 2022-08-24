@@ -1,0 +1,20 @@
+---
+- hosts: mgmt
+  tasks:
+    - debug:
+        msg: "{{ item }}"
+      loop: "{{ list_simple }}"
+      vars:
+        list_simple: ['A', 'B', 'C']
+    - debug:
+        msg: "{{ item.key }} - {{ item.val }}"
+      loop:
+        - { key: 'A', val: 'X' }
+        - { key: 'B', val: 'Y' }
+    - debug:
+        msg: "{{ item[0] }} - {{ item[1] }}"
+      loop: "{{ list_one | product(list_two) | list }}"
+      vars:
+        list_one: ['A', 'B']
+        list_two: ['X', 'Y', 'Z']
+
