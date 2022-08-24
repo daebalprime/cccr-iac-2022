@@ -1,0 +1,22 @@
+---
+- hosts: node1
+  tasks:
+  - name: backgroud-tasks
+    command: sleep 30
+    async: 1000 #-B
+    poll: 0 #-P
+    register: btask
+
+  - name: task1
+    ping:
+  - name: task2
+    ping:
+  - name: check finished
+    async_status:
+      jid: "{{ btask.ansible_job_id }}"
+    register: async_result
+    until: async_result.finished
+    retries: 20
+  - name: resync-tasks
+    ping:
+
