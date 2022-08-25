@@ -1,0 +1,18 @@
+---
+- hosts: mgmt
+  tasks:
+  - name: t1
+    debug:
+    tags:
+    - web
+  - name: t2
+    debug:
+    tags:
+    - db
+  - name: t3
+    debug:
+    tags:
+    - web
+    - db
+  - name: t4
+    debug:

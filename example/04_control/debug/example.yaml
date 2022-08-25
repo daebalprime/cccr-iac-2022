@@ -1,0 +1,10 @@
+---
+- hosts: node1
+  debugger: always
+  vars:
+    message: hello
+  tasks:
+  - ping:
+      data: xyz
+  - debug:
+      var: message
