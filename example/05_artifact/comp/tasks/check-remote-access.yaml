@@ -1,0 +1,8 @@
+  - name: Check Remote Access
+    uri:
+      url: "http://{{ hostvars[ item ]['ansible_host'] }}:{{ http_port }}"
+      status_code: 200
+      return_content: true
+      method: GET
+    register: access_result
+    loop: "{{ groups['webservers'] }}"

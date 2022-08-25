@@ -1,0 +1,23 @@
+---
+- name: Install Apache with sb-admin
+  hosts: webservers
+  become: yes
+
+  tasks:
+  - import_tasks: tasks/ubuntu.yaml
+    when:
+    - ansible_distribution == "Ubuntu"
+
+  - import_tasks: tasks/centos.yaml
+    when:
+    - ansible_distribution == "CentOS"
+
+  - import_tasks: tasks/check-local-access.yaml
+
+  handlers:
+  - import_tasks: handlers/restart-service.yaml
+
+- name: Check Remote Access
+  hosts: local
+  tasks:
+  - import_tasks: tasks/check-remote-access.yaml
