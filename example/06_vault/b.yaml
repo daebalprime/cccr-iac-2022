@@ -1,0 +1,8 @@
+---
+- hosts: node1
+  vars_files:
+  - vars.yaml
+
+  tasks:
+  - debug:
+      var: pass
