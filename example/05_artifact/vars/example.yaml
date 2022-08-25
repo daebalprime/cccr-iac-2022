@@ -1,0 +1,9 @@
+---
+- hosts: all
+  tasks:
+  - debug:
+      var: service_port
+  - debug:
+      var: package
+  - debug:
+      msg: "{{ a }} / {{ b }}"
