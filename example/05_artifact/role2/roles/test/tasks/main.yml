@@ -1,0 +1,6 @@
+---
+# tasks file for roles/test
+- name: roletask
+  command: hostname
+  notify:
+  - rolehandler1

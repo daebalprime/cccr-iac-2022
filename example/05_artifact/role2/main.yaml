@@ -1,0 +1,28 @@
+---
+- hosts: node1
+  
+  pre_tasks:
+  - name: pretask
+    command: hostname
+    notify:
+    - handler1
+
+  roles:
+  - test
+
+  tasks:
+  - name: task
+    command: hostname
+    notify:
+    - handler1
+
+  post_tasks:
+  - name: posttask
+    command: hostname
+    notify:
+    - handler1
+
+  handlers:
+  - name: handler1
+    debug:
+      msg: "HANDLER"
