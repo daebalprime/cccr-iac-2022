@@ -1,0 +1,14 @@
+---
+- hosts: node1
+  tasks:
+  - ping:
+  - command: ls
+    notify:
+      - handler1
+  - ping:
+
+  handlers:
+  - name: handler1
+    include_tasks: handler.yaml
+  #- import_tasks: handler.yaml
+

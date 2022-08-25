@@ -1,0 +1,10 @@
+---
+- hosts: node1
+  gather_facts: no
+  tasks:
+  - ping:
+  - include_tasks: task.yaml
+    #loop: ['a', 'b']
+  - import_tasks: task.yaml
+    #loop: ['a', 'b']
+  - ping:
