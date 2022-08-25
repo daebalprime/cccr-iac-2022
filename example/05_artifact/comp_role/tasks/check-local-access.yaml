@@ -1,0 +1,6 @@
+  - name: Check Local Access
+    uri:
+      url: "http://{{ hostvars[inventory_hostname]['ansible_host'] }}:{{ http_port }}"
+      status_code: 200
+      return_content: true
+      method: GET

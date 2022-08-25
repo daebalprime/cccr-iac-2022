@@ -1,0 +1,11 @@
+---
+- name: Install Apache with sb-admin
+  hosts: webservers
+  become: yes
+
+  roles:
+  - install-apache
+
+  post_tasks:
+  - import_tasks: tasks/check-local-access.yaml
+  - import_tasks: tasks/check-remote-access.yaml

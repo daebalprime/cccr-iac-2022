@@ -1,0 +1,43 @@
+---
+- name: Remove Apache
+  hosts: webservers
+  become: yes
+
+  tasks:
+  - name: Stop Service for Ubuntu
+    service:
+      name: apache2
+      state: stopped
+    when:
+    - ansible_distribution == "Ubuntu"
+    ignore_errors: true
+
+  - name: Stop Service for CentOS
+    service:
+      name: httpd
+      state: stopped
+    when:
+    - ansible_distribution == "CentOS"
+    ignore_errors: true
+
+  - name: Delete Web Contents
+    file:
+      path: /var/www/html
+      state: absent
+
+  - name: Remove Apache2 Package
+    apt:
+      name: apache2
+      state: absent
+      autoremove: true
+      purge: true
+    when:
+    - ansible_distribution == "Ubuntu"
+  - name: Remove Httpd Package
+    yum:
+      name: httpd
+      autoremove: true
+      state: absent
+    when:
+    - ansible_distribution == "CentOS"
+

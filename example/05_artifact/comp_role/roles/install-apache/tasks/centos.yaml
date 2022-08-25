@@ -1,0 +1,35 @@
+    - name: Install Git
+      yum:
+       name: git
+       state: present
+    - name: Create Directory
+      file:
+        path: "{{ web_document_directory }}"
+        state: directory
+    - name: Clone git repo 
+      git:
+        repo: "{{ web_source_url }}"
+        dest: "{{ web_document_directory }}" 
+        version: "{{ web_source_version }}"
+    - name: Install Httpd Package for CentOS
+      yum:
+        name: httpd
+        state: present
+    - name: Configure Httpd Service Port for CentOS
+      lineinfile:
+        path: /etc/httpd/conf/httpd.conf
+        regexp: '^LISTEN'
+        line: "LISTEN {{ http_port }}" 
+      notify:
+        - Restart Httpd
+    - name: Start/Enable Apache Service for CentOS
+      service:
+        name: httpd
+        enabled: true
+        state: started
+    - name: Open Firewall Web service for CentOS
+      firewalld:
+        port: "{{ http_port }}/tcp"
+        permanent: true
+        state: enabled
+        immediate: true
