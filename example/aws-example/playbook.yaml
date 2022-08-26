@@ -1,0 +1,24 @@
+---
+- hosts: all
+  become: true
+  remote_user: ec2-user
+  gather_facts: false
+
+  tasks:
+  - name: Install Package
+    yum:
+      name: httpd
+      state: present
+    poll: 5
+
+  - name: Start/Enable Service
+    service:
+      name: httpd
+      state: started
+      enabled: true
+
+  - name: Create Contents
+    copy:
+      content: "<h1> Hello Ansible </h1>"
+      dest: /var/www/html/index.html
+
