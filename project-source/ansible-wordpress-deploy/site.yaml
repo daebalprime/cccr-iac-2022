@@ -1,0 +1,22 @@
+- hosts: default
+  gather_facts: true
+  become: true
+
+  roles:
+  - wordpress
+  - mysql
+
+  post_tasks:
+  - name: Access Check
+    uri:
+      url: "http://{{ inventory_hostname }}"
+      method: GET
+      status_code: 
+      - 200
+      - 302
+    register: uri_result
+
+  - name: Status Code
+    debug:
+      var: uri_result.status
+      
