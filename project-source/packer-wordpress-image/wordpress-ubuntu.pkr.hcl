@@ -8,8 +8,8 @@ packer {
 }
 
 source "amazon-ebs" "wordpress" {
-  region        = "ap-northeast-2"
-  profile       = "default"
+  region  = "ap-northeast-2"
+  profile = "default"
 
   ami_name      = "wordpress"
   instance_type = "t3.small"

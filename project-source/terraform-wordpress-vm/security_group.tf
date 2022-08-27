@@ -1,5 +1,5 @@
 resource "aws_security_group" "my_sg_web" {
-  name = "allow-web"
+  name   = "allow-web"
   vpc_id = module.my_vpc.vpc_id
 
   egress {
